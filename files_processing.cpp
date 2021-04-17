@@ -3,8 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <cmath>
-#include <cstdlib>
 #include <sstream>
 
 using namespace std;
@@ -17,29 +15,20 @@ void SHOW_DEVICES();
 void SHOW_ALL_DEVICES();
 void SHOW_ACTIVE_DEVICES();
 void SHOW_INACTIVE_DEVICES();
-
 void ADD_A_DEVICE();
 
 void SHOW_MEASUREMENTS();
-
 void ADD_A_MEASUREMENT();
 
 void PROCESSING_OF_MEASUREMENTS();
 
-void CREATE_DEVICES();
-void CREATE_MEASUREMENTS();
-
-
 
 int main()
 {
-	CREATE_DEVICES();
-	CREATE_MEASUREMENTS();
 	MENU();
 
 	return 0;
 }
-
 
 
 void MENU()
@@ -70,7 +59,6 @@ void MENU()
 			break;
 		case 5: PROCESSING_OF_MEASUREMENTS();
 			break;
-
 		}
 	} while (n != 0);
 }
@@ -122,7 +110,6 @@ void SHOW_DEVICES()
 			break;
 		case 4: MENU();
 			break;
-
 		}
 	} while (n != 0);
 }
@@ -133,7 +120,6 @@ void SHOW_ALL_DEVICES()
 	system("CLS");
 
 	fstream devices;
-
 	devices.open("devices.txt", ios::in);
 
 	string line;
@@ -154,15 +140,13 @@ void SHOW_ACTIVE_DEVICES()
 	system("CLS");
 
 	fstream devices;
-
 	devices.open("devices.txt", ios::in);
 
 	string line;
-	char n;
 
 	while(getline(devices, line))
 	{
-		if (line[76] != 'i')
+		if (line[76] == 'a' || line[0] == 'I')
 		{
 			cout << line << endl;
 		}
@@ -179,15 +163,13 @@ void SHOW_INACTIVE_DEVICES()
 	system("CLS");
 
 	fstream devices;
-
 	devices.open("devices.txt", ios::in);
 
 	string line;
-	char t;
 
 	while(getline(devices, line))
 	{
-		if (line[76] != 'a')
+		if (line[76] == 'i' || line[0] == 'I')
 		{
 			cout << line << endl;
 		}
@@ -210,7 +192,6 @@ void ADD_A_DEVICE()
 	int UpperRange;
 	string Unit;
 	int Resolution;
-
 	fstream devices;
 
 	cout << "Enter the device ID: ";
@@ -257,7 +238,6 @@ void SHOW_MEASUREMENTS()
 	system("CLS");
 
 	fstream measurements;
-
 	measurements.open("measurements.txt", ios::in);
 
 	string line;
@@ -279,7 +259,6 @@ void ADD_A_MEASUREMENT()
 
 	int ID;
 	int measurement;
-
 	fstream measurements;
 
 	cout << "Enter the device ID:";
@@ -288,7 +267,7 @@ void ADD_A_MEASUREMENT()
 	cin >> measurement;
 
 	measurements.open("measurements.txt", ios::out | ios::app);
-	measurements << setw(2) << ID << setw(15) << measurement << endl;
+	measurements << setw(10) << ID << setw(15) << measurement << endl;
 	measurements.close();
 
 	cout << endl;
@@ -321,17 +300,12 @@ void PROCESSING_OF_MEASUREMENTS()
 	float resolution;
 	float lower_range;
 	float upper_range;
-
-
 	fstream measurements;
 	fstream devices;
 
-
 	cout << setw(10) << "Result" << setw(10) << "Unit" << setw(15) << "Device" << endl;
 
-
 	measurements.open("measurements.txt");
-
 	
 	while (getline(measurements, line_measurement))
 	{
@@ -340,12 +314,12 @@ void PROCESSING_OF_MEASUREMENTS()
 		do
 		{
 			getline(devices, line_device);
-		} while (line_measurement[1] != line_device[1]);
+		} while (line_measurement[9] != line_device[1]);
 
 		devices.close();
 	
 		//	Reading the values needed for calculations from files to the program and changing the way of saving them (string-> float).
-		string MeasurementResult = line_measurement.substr(2, 15);
+		string MeasurementResult = line_measurement.substr(10, 15);
 		istringstream(MeasurementResult) >> measurement_result;
 
 		string Resolution = line_device.substr(54, 15);
@@ -369,56 +343,9 @@ void PROCESSING_OF_MEASUREMENTS()
 		{
 			cout << setw(10) << result << setw(9) << line_device[52] << line_device[53] << setw(14) << "device " << line_device[1] << endl;
 		}
-
 	} 
-
 	
 	measurements.close();
 
 	BACK_TO_MENU();
-}
-
-
-//	Creation of the devices.txt file with sample devices if the devices.txt file does not exist.
-void CREATE_DEVICES()
-{
-	fstream devices;
-
-	devices.open("devices.txt", ios::in);
-	if (devices.good() == false)
-	{
-		devices.open("devices.txt", ios::out);
-		devices << setw(2) << "ID" << setw(15) << "IP" << setw(13) << "LowerRange" << setw(13) << "UpperRange" << setw(11) << "Unit" << setw(15) << "Resolution" << setw(8) << "State" << endl;
-		devices << setw(2) << "0" << setw(15) << "232.42.2.44" << setw(13) << "5" << setw(13) << "10" << setw(11) << "V" << setw(15) << "8" << setw(8) << "a" << endl;
-		devices << setw(2) << "1" << setw(15) << "232.44.33.2" << setw(13) << "0" << setw(13) << "5" << setw(11) << "W" << setw(15) << "12" << setw(8) << "a" << endl;
-		devices << setw(2) << "2" << setw(15) << "754.79.5.11" << setw(13) << "-4" << setw(13) << "20" << setw(11) << "mA" << setw(15) << "8" << setw(8) << "i" << endl;
-		devices << setw(2) << "3" << setw(15) << "875.24.77.2" << setw(13) << "0" << setw(13) << "7" << setw(11) << "W" << setw(15) << "12" << setw(8) << "a" << endl;
-		devices << setw(2) << "4" << setw(15) << "232.49.44.11" << setw(13) << "-5" << setw(13) << "10" << setw(11) << "mA" << setw(15) << "8" << setw(8) << "i" << endl;
-		devices << setw(2) << "5" << setw(15) << "654.39.2.15" << setw(13) << "4" << setw(13) << "16" << setw(11) << "mA" << setw(15) << "8" << setw(8) << "i" << endl;
-		devices << setw(2) << "6" << setw(15) << "925.65.54.4" << setw(13) << "2" << setw(13) << "4" << setw(11) << "W" << setw(15) << "12" << setw(8) << "a" << endl;
-	}
-	devices.close();
-}
-
-
-//	Creation of the measurements.txt file with sample measurements, if the file measurements.txt does not exist.
-void CREATE_MEASUREMENTS()
-{
-	fstream measurements;
-
-	measurements.open("measurements.txt", ios::in);
-	if (measurements.good() == false)
-	{
-		measurements.open("measurements.txt", ios::out);
-		measurements << setw(2) << "ID" << setw(15) << "Measurement" << endl;
-		measurements << setw(2) << "0" << setw(15) << "887" << endl;
-		measurements << setw(2) << "1" << setw(15) << "224" << endl;
-		measurements << setw(2) << "2" << setw(15) << "775" << endl;
-		measurements << setw(2) << "1" << setw(15) << "44" << endl;
-		measurements << setw(2) << "4" << setw(15) << "1123" << endl;
-		measurements << setw(2) << "3" << setw(15) << "2" << endl;
-		measurements << setw(2) << "5" << setw(15) << "88" << endl;
-		measurements << setw(2) << "6" << setw(15) << "93" << endl;
-	}
-	measurements.close();
 }
