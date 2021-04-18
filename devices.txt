@@ -1,0 +1,8 @@
+ID             IP   LowerRange   UpperRange       Unit     Resolution   State
+ 0    232.42.2.44            5           10          V              8       a
+ 1    232.44.33.2            0            5          W             12       a
+ 2    754.79.5.11           -4           20         mA              8       i
+ 3    875.24.77.2            0            7          W             12       a
+ 4   232.49.44.11           -5           10         mA              8       i
+ 5    654.39.2.15            4           16         mA              8       i
+ 6    925.65.54.4            2            4          W             12       a
